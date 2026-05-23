@@ -1,0 +1,434 @@
+
+:root {
+
+  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+  --ease-in-out-back: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  --ease-spring: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+  --duration-fast: 0.15s;
+  --duration-normal: 0.25s;
+  --duration-slow: 0.35s;
+  --duration-slower: 0.5s;
+  --lift-subtle: translateY(-2px);
+  --lift-medium: translateY(-4px);
+  --lift-strong: translateY(-6px);
+  --scale-subtle: scale(1.02);
+  --scale-medium: scale(1.05);
+  --scale-strong: scale(1.08);
+}
+
+.btn, button:not(.no-enhance) {
+  position: relative;
+  overflow: hidden;
+  transition: all var(--duration-normal) var(--ease-smooth);
+  transform-origin: center;
+  will-change: transform, box-shadow;
+}
+
+.btn::before, button:not(.no-enhance)::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: width var(--duration-slow) var(--ease-out-quart), 
+              height var(--duration-slow) var(--ease-out-quart);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.btn:active::before, button:not(.no-enhance):active::before {
+  width: 300px;
+  height: 300px;
+}
+
+.btn-primary:hover, .btn.btn-primary:hover {
+  transform: var(--lift-medium);
+  box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
+}
+
+.btn-secondary:hover, .btn.btn-secondary:hover {
+  transform: var(--lift-medium);
+  box-shadow: 0 8px 25px rgba(107, 114, 128, 0.4);
+}
+
+.btn-danger:hover, .btn.btn-danger:hover {
+  transform: var(--lift-medium);
+  box-shadow: 0 8px 25px rgba(239, 68, 68, 0.4);
+}
+
+.btn:active, button:not(.no-enhance):active {
+  transform: translateY(1px) scale(0.98);
+  transition-duration: var(--duration-fast);
+}
+
+.btn:focus-visible, button:not(.no-enhance):focus-visible {
+  outline: 3px solid rgba(59, 130, 246, 0.5);
+  outline-offset: 2px;
+  transform: var(--lift-subtle);
+}
+
+.form-input, .form-select, input:not(.no-enhance), select:not(.no-enhance), textarea:not(.no-enhance) {
+  transition: all var(--duration-normal) var(--ease-smooth);
+  position: relative;
+  will-change: transform, box-shadow, border-color;
+}
+
+
+.form-input:focus, .form-select:focus, 
+input:not(.no-enhance):focus, select:not(.no-enhance):focus, textarea:not(.no-enhance):focus {
+  transform: var(--lift-subtle);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15), 
+              0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.form-group.floating {
+  position: relative;
+}
+
+.form-group.floating .form-label {
+  position: absolute;
+  top: 50%;
+  left: 1rem;
+  transform: translateY(-50%);
+  background: white;
+  padding: 0 0.5rem;
+  color: var(--text-muted);
+  transition: all var(--duration-normal) var(--ease-smooth);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.form-group.floating .form-input:focus + .form-label,
+.form-group.floating .form-input:not(:placeholder-shown) + .form-label {
+  top: 0;
+  transform: translateY(-50%) scale(0.85);
+  color: var(--primary-color);
+  font-weight: 600;
+}
+
+.card, .user-card, .metric-card, .action-card, 
+.user-management-user-card, .call-history-ticket-card {
+  transition: all var(--duration-normal) var(--ease-smooth);
+  will-change: transform, box-shadow;
+  cursor: pointer;
+}
+
+.card:hover, .user-card:hover, .metric-card:hover, .action-card:hover,
+.user-management-user-card:hover, .call-history-ticket-card:hover {
+  transform: var(--lift-medium) var(--scale-subtle);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+}
+
+.card:active, .user-card:active, .metric-card:active, .action-card:active {
+  transform: translateY(1px) scale(0.98);
+  transition-duration: var(--duration-fast);
+}
+
+
+.nav-item, .sidebar-nav-item, .nav-link {
+  position: relative;
+  transition: all var(--duration-normal) var(--ease-smooth);
+  overflow: hidden;
+}
+
+.nav-item::before, .sidebar-nav-item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  transition: left var(--duration-slower) var(--ease-smooth);
+}
+
+.nav-item:hover::before, .sidebar-nav-item:hover::before {
+  left: 100%;
+}
+
+.nav-item:hover .material-icons, .sidebar-nav-item:hover .material-icons {
+  animation: iconBounce var(--duration-slow) var(--ease-spring);
+}
+
+@keyframes iconBounce {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+}
+
+.dropdown-menu, .user-dropdown, .notification-dropdown {
+  animation: dropdownSlide var(--duration-normal) var(--ease-out-quart);
+}
+
+@keyframes dropdownSlide {
+  from {
+    opacity: 0;
+    transform: translateY(-10px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.dropdown-item {
+  position: relative;
+  transition: all var(--duration-fast) var(--ease-smooth);
+}
+
+.dropdown-item::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 3px;
+  height: 100%;
+  background: var(--primary-color);
+  transform: scaleY(0);
+  transition: transform var(--duration-normal) var(--ease-smooth);
+}
+
+.dropdown-item:hover::before {
+  transform: scaleY(1);
+}
+
+.dropdown-item:hover {
+  padding-left: calc(1.5rem + 6px);
+}
+
+.modal-container {
+  animation: modalEntrance var(--duration-slow) var(--ease-out-quart);
+}
+
+@keyframes modalEntrance {
+  from {
+    opacity: 0;
+    transform: translateY(-30px) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.modal-close-btn {
+  position: relative;
+  transition: all var(--duration-normal) var(--ease-smooth);
+}
+
+.modal-close-btn::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: rgba(239, 68, 68, 0.1);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: all var(--duration-normal) var(--ease-smooth);
+  z-index: -1;
+}
+
+.modal-close-btn:hover::before {
+  width: 100%;
+  height: 100%;
+}
+
+.modal-close-btn:hover {
+  transform: rotate(90deg) scale(1.1);
+}
+
+.search-input, .search-wrapper {
+  transition: all var(--duration-normal) var(--ease-smooth);
+}
+
+.search-wrapper:focus-within {
+  transform: var(--lift-subtle);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
+}
+
+.search-icon {
+  transition: all var(--duration-normal) var(--ease-smooth);
+}
+
+.search-wrapper:focus-within .search-icon {
+  transform: scale(1.1);
+  color: var(--primary-color);
+}
+
+table tr {
+  transition: all var(--duration-fast) var(--ease-smooth);
+}
+
+table tr:hover {
+  background: rgba(59, 130, 246, 0.05);
+  transform: var(--lift-subtle);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+table td {
+  transition: all var(--duration-fast) var(--ease-smooth);
+}
+
+.badge, .status-badge, .role-badge {
+  transition: all var(--duration-normal) var(--ease-smooth);
+  cursor: default;
+}
+
+.badge:hover, .status-badge:hover, .role-badge:hover {
+  transform: var(--scale-subtle);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.loading-spinner {
+  animation: spinEnhanced 1s linear infinite;
+}
+
+@keyframes spinEnhanced {
+  from { transform: rotate(0deg) scale(1); }
+  50% { transform: rotate(180deg) scale(1.1); }
+  to { transform: rotate(360deg) scale(1); }
+}
+
+.skeleton {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: skeletonLoading 1.5s infinite;
+}
+
+@keyframes skeletonLoading {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+@media (prefers-contrast: high) {
+  .btn:focus-visible, button:focus-visible {
+    outline: 3px solid currentColor;
+    outline-offset: 3px;
+  }
+}
+
+
+[data-tooltip] {
+  position: relative;
+  cursor: help;
+}
+
+[data-tooltip]::before {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-8px);
+  background: rgba(0, 0, 0, 0.9);
+  color: white;
+  padding: 0.5rem 0.75rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: all var(--duration-normal) var(--ease-smooth);
+  z-index: 1000;
+}
+
+[data-tooltip]::after {
+  content: '';
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-2px);
+  border: 4px solid transparent;
+  border-top-color: rgba(0, 0, 0, 0.9);
+  opacity: 0;
+  transition: all var(--duration-normal) var(--ease-smooth);
+  z-index: 1000;
+}
+
+[data-tooltip]:hover::before,
+[data-tooltip]:hover::after {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+  transition: background var(--duration-normal) var(--ease-smooth);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.4);
+}
+
+.modal-container {
+  isolation: isolate;
+}
+
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 6px;
+  background: var(--primary-color);
+  color: white;
+  padding: 8px;
+  text-decoration: none;
+  border-radius: 4px;
+  transition: top var(--duration-normal) var(--ease-smooth);
+}
+
+.skip-link:focus {
+  top: 6px;
+}
+
+.btn, .card, .nav-item, .form-input, .modal-container {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+.card, .modal-container {
+  contain: layout style paint;
+}
+
+.no-enhance {
+  transition: none !important;
+  transform: none !important;
+  animation: none !important;
+}
+
+.gpu-accelerated {
+  transform: translateZ(0);
+  will-change: transform;
+}
+
+.hover-lift-subtle:hover { transform: var(--lift-subtle); }
+.hover-lift-medium:hover { transform: var(--lift-medium); }
+.hover-lift-strong:hover { transform: var(--lift-strong); }
+.hover-scale-subtle:hover { transform: var(--scale-subtle); }
+.hover-scale-medium:hover { transform: var(--scale-medium); }
+.hover-scale-strong:hover { transform: var(--scale-strong); }

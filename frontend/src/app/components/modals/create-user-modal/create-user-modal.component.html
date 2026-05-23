@@ -1,0 +1,123 @@
+<div class="modal-overlay" *ngIf="isVisible" (click)="onClose()">
+  <div class="modal-container scale-in" (click)="$event.stopPropagation()">
+    
+    <div class="modal-header">
+      <div class="header-content">
+        <div class="icon-box">
+          <span class="material-icons-round">person_add</span>
+        </div>
+        <div class="title-group">
+          <h3>Crear Nuevo Usuario</h3>
+          <p>Ingresa los datos para registrar el acceso.</p>
+        </div>
+      </div>
+      <button class="close-btn" (click)="onClose()">
+        <span class="material-icons-round">close</span>
+      </button>
+    </div>
+    
+    <div class="modal-body">
+      <form (ngSubmit)="onSubmit()" #createForm="ngForm" class="user-form">
+        
+        <div class="form-grid">
+          <div class="form-group full-width">
+            <label>Nombre Completo</label>
+            <div class="input-wrapper">
+              <span class="material-icons-round input-icon">badge</span>
+              <input 
+                type="text" 
+                class="form-input" 
+                name="nombreCompleto" 
+                [(ngModel)]="newUser.nombreCompleto" 
+                placeholder="Ej. Juan Pérez"
+                required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Usuario</label>
+            <div class="input-wrapper">
+              <span class="material-icons-round input-icon">account_circle</span>
+              <input 
+                type="text" 
+                class="form-input" 
+                name="username" 
+                [(ngModel)]="newUser.username" 
+                placeholder="juan.perez"
+                required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Rol</label>
+            <div class="input-wrapper">
+              <span class="material-icons-round input-icon">admin_panel_settings</span>
+              <select 
+                class="form-input" 
+                name="rol" 
+                [(ngModel)]="newUser.rol" 
+                required>
+                <option value="" disabled selected>Selecciona...</option>
+                <option *ngFor="let rol of roles" [value]="rol.nombre">{{ rol.nombre }}</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Email</label>
+            <div class="input-wrapper">
+              <span class="material-icons-round input-icon">email</span>
+              <input 
+                type="email" 
+                class="form-input" 
+                name="email" 
+                [(ngModel)]="newUser.email" 
+                placeholder="juan@helpi.com"
+                required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Teléfono</label>
+            <div class="input-wrapper">
+              <span class="material-icons-round input-icon">phone</span>
+              <input 
+                type="tel" 
+                class="form-input" 
+                name="telefono" 
+                [(ngModel)]="newUser.telefono" 
+                placeholder="+51 999 000 000"
+                required>
+            </div>
+          </div>
+
+          <div class="form-group full-width">
+            <label>Contraseña Temporal</label>
+            <div class="input-wrapper">
+              <span class="material-icons-round input-icon">lock</span>
+              <input 
+                type="password" 
+                class="form-input" 
+                name="password" 
+                [(ngModel)]="newUser.password" 
+                placeholder="••••••••"
+                required>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="onClose()">
+            Cancelar
+          </button>
+          <button type="submit" class="btn btn-primary" [disabled]="!createForm.valid">
+            <span class="material-icons-round">check</span>
+            Crear Usuario
+          </button>
+        </div>
+
+      </form>
+    </div>
+
+  </div>
+</div>

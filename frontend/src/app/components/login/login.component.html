@@ -1,0 +1,62 @@
+<div class="login-wrapper">
+  
+  <div class="login-card fade-in">
+    
+    <div class="login-header">
+      <div class="brand-logo">H</div>
+      <h1>Bienvenido a Helpi</h1>
+      <p>Ingresa a tu cuenta para continuar</p>
+    </div>
+
+    <form (ngSubmit)="onLogin()" class="login-form">
+      
+      <div class="form-field">
+        <label for="username">Usuario</label>
+        <div class="input-wrapper">
+          <span class="material-icons-round input-icon">person</span>
+          <input 
+            type="text" 
+            id="username" 
+            [(ngModel)]="username" 
+            name="username" 
+            class="form-input" 
+            placeholder="Ej. usuario" 
+            required 
+            autocomplete="username">
+        </div>
+      </div>
+
+      <div class="form-field">
+        <label for="password">Contraseña</label>
+        <div class="input-wrapper">
+          <span class="material-icons-round input-icon">lock</span>
+          <input 
+            type="password" 
+            id="password" 
+            [(ngModel)]="password" 
+            name="password" 
+            class="form-input" 
+            placeholder="••••••••" 
+            required 
+            autocomplete="current-password">
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-primary w-100">
+        Iniciar Sesión
+      </button>
+
+    </form>
+
+    <div *ngIf="errorMessage" class="error-box slide-up">
+      <span class="material-icons-round">error_outline</span>
+      <span>{{ errorMessage }}</span>
+    </div>
+
+  </div>
+
+  <div class="login-footer">
+    <p>© 2025 Helpi Workspace</p>
+  </div>
+
+</div>

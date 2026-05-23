@@ -1,0 +1,119 @@
+<div class="modal-overlay" *ngIf="isVisible" (click)="onClose()">
+  <div class="modal-container scale-in" (click)="$event.stopPropagation()">
+    
+    <div class="modal-header">
+      <div class="header-content">
+        <div class="icon-box">
+          <span class="material-icons-round">edit</span>
+        </div>
+        <div class="title-group">
+          <h3>Editar Usuario</h3>
+          <p>Modifica los datos de acceso.</p>
+        </div>
+      </div>
+      <button class="close-btn" (click)="onClose()">
+        <span class="material-icons-round">close</span>
+      </button>
+    </div>
+    
+    <div class="modal-body">
+      <form (ngSubmit)="onSubmit()" #editForm="ngForm" class="user-form">
+        
+        <div class="form-grid">
+          <div class="form-group full-width">
+            <label>Nombre Completo</label>
+            <div class="input-wrapper">
+              <span class="material-icons-round input-icon">badge</span>
+              <input 
+                type="text" 
+                class="form-input" 
+                name="nombreCompleto" 
+                [(ngModel)]="editUser.nombreCompleto" 
+                required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Usuario</label>
+            <div class="input-wrapper">
+              <span class="material-icons-round input-icon">account_circle</span>
+              <input 
+                type="text" 
+                class="form-input" 
+                name="username" 
+                [(ngModel)]="editUser.username" 
+                required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Rol</label>
+            <div class="input-wrapper">
+              <span class="material-icons-round input-icon">admin_panel_settings</span>
+              <select 
+                class="form-input" 
+                name="rol" 
+                [(ngModel)]="editUser.rol" 
+                required>
+                <option value="" disabled>Selecciona...</option>
+                <option *ngFor="let rol of roles" [value]="rol.nombre">{{ rol.nombre }}</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Email</label>
+            <div class="input-wrapper">
+              <span class="material-icons-round input-icon">email</span>
+              <input 
+                type="email" 
+                class="form-input" 
+                name="email" 
+                [(ngModel)]="editUser.email" 
+                required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Teléfono</label>
+            <div class="input-wrapper">
+              <span class="material-icons-round input-icon">phone</span>
+              <input 
+                type="tel" 
+                class="form-input" 
+                name="telefono" 
+                [(ngModel)]="editUser.telefono" 
+                required>
+            </div>
+          </div>
+
+          <div class="form-group full-width">
+            <label>Nueva Contraseña <span class="optional">(Opcional)</span></label>
+            <div class="input-wrapper">
+              <span class="material-icons-round input-icon">lock_reset</span>
+              <input 
+                type="password" 
+                class="form-input" 
+                name="password" 
+                [(ngModel)]="editUser.password" 
+                placeholder="Dejar vacío para mantener la actual"
+                autocomplete="new-password">
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="onClose()">
+            Cancelar
+          </button>
+          <button type="submit" class="btn btn-primary" [disabled]="!editForm.valid">
+            <span class="material-icons-round">save</span>
+            Guardar Cambios
+          </button>
+        </div>
+
+      </form>
+    </div>
+
+  </div>
+</div>

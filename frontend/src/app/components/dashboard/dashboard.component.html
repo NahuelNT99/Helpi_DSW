@@ -1,0 +1,170 @@
+<div class="layout-wrapper">
+  
+  <app-sidebar (navigationChange)="setActiveTab($event)"></app-sidebar>
+
+  <div class="main-panel">
+    
+    <app-header></app-header>
+
+    <main class="content-scrollable">
+      
+      <router-outlet></router-outlet>
+      
+      <div class="dashboard-view" *ngIf="isSupervisor">
+        
+        <div *ngIf="activeTab === 'overview'" class="overview-container fade-in">
+          
+          <div class="welcome-banner">
+            <div class="welcome-text">
+              <h1>Panel de Control</h1>
+              <p>Bienvenido a Helpi. Aquí tienes el resumen de hoy.</p>
+            </div>
+            <button class="btn-icon-subtle" (click)="ngOnInit()" title="Actualizar datos">
+              <span class="material-icons-round">refresh</span>
+            </button>
+          </div>
+          
+          <div class="metrics-grid">
+            
+            <div class="stat-card">
+              <div class="stat-top">
+                <div class="stat-icon green">
+                  <span class="material-icons-round">people</span>
+                </div>
+                <span class="trend up">
+                  <span class="material-icons-round">trending_up</span> +5.2%
+                </span>
+              </div>
+              <div class="stat-info">
+                <span class="stat-value">{{ totalClientes | number }}</span>
+                <span class="stat-label">Clientes Totales</span>
+              </div>
+            </div>
+            
+            <div class="stat-card">
+              <div class="stat-top">
+                <div class="stat-icon orange">
+                  <span class="material-icons-round">confirmation_number</span>
+                </div>
+                <span class="trend down">
+                  <span class="material-icons-round">trending_down</span> -2.1%
+                </span>
+              </div>
+              <div class="stat-info">
+                <span class="stat-value">{{ ticketsActivos }}</span>
+                <span class="stat-label">Tickets Pendientes</span>
+              </div>
+            </div>
+            
+            <div class="stat-card">
+              <div class="stat-top">
+                <div class="stat-icon blue">
+                  <span class="material-icons-round">manage_accounts</span>
+                </div>
+                <span class="trend neutral">
+                  <span class="material-icons-round">add</span> 1
+                </span>
+              </div>
+              <div class="stat-info">
+                <span class="stat-value">{{ totalUsuarios }}</span>
+                <span class="stat-label">Usuarios Sistema</span>
+              </div>
+            </div>
+            
+            <div class="stat-card">
+              <div class="stat-top">
+                <div class="stat-icon purple">
+                  <span class="material-icons-round">phone_in_talk</span>
+                </div>
+                <span class="trend up">
+                  <span class="material-icons-round">trending_up</span> +12%
+                </span>
+              </div>
+              <div class="stat-info">
+                <span class="stat-value">{{ llamadasHoy }}</span>
+                <span class="stat-label">Llamadas Hoy</span>
+              </div>
+            </div>
+
+          </div>
+          
+          <div class="quick-actions-wrapper">
+            <h3 class="section-title">Acciones Rápidas</h3>
+            
+            <div class="actions-grid">
+              <button class="action-card" (click)="setActiveTab('users')">
+                <div class="action-icon blue-bg">
+                  <span class="material-icons-round">person_add</span>
+                </div>
+                <div class="action-details">
+                  <span class="action-name">Crear Usuario</span>
+                  <span class="action-desc">Registrar nuevo acceso</span>
+                </div>
+                <span class="material-icons-round action-arrow">arrow_forward</span>
+              </button>
+
+              <button class="action-card" (click)="setActiveTab('tickets')">
+                <div class="action-icon orange-bg">
+                  <span class="material-icons-round">add_circle</span>
+                </div>
+                <div class="action-details">
+                  <span class="action-name">Nuevo Ticket</span>
+                  <span class="action-desc">Reportar incidencia</span>
+                </div>
+                <span class="material-icons-round action-arrow">arrow_forward</span>
+              </button>
+
+              <button class="action-card" (click)="setActiveTab('clients')">
+                <div class="action-icon purple-bg">
+                  <span class="material-icons-round">search</span>
+                </div>
+                <div class="action-details">
+                  <span class="action-name">Buscar Cliente</span>
+                  <span class="action-desc">Consultar base de datos</span>
+                </div>
+                <span class="material-icons-round action-arrow">arrow_forward</span>
+              </button>
+            </div>
+          </div>
+
+        </div>
+        
+        <div *ngIf="activeTab === 'clients'" class="content-wrapper fade-in">
+          <app-clients (clientSelected)="onClientSelected($event)"></app-clients>
+        </div>
+
+        <div *ngIf="activeTab === 'tickets'" class="content-wrapper fade-in">
+          <app-ticket-management></app-ticket-management>
+        </div>
+
+        <div *ngIf="activeTab === 'users'" class="content-wrapper fade-in">
+          <app-user-management></app-user-management>
+        </div>
+
+        <div *ngIf="activeTab === 'history'" class="content-wrapper fade-in">
+          <app-call-history></app-call-history>
+        </div>
+
+      </div>
+
+      <div class="dashboard-view" *ngIf="userRole === 'Técnico' || userRole === 'Tecnico'">
+        <div *ngIf="activeTab === 'tickets'" class="content-wrapper fade-in">
+          <app-ticket-management></app-ticket-management>
+        </div>
+      </div>
+
+      <div class="dashboard-view" *ngIf="!isSupervisor && userRole !== 'Técnico' && userRole !== 'Tecnico'">
+        <div *ngIf="activeTab === 'clients'" class="content-wrapper fade-in">
+          <app-clients (clientSelected)="onClientSelected($event)"></app-clients>
+        </div>
+        <div *ngIf="activeTab === 'tickets'" class="content-wrapper fade-in">
+          <app-ticket-management></app-ticket-management>
+        </div>
+        <div *ngIf="activeTab === 'history'" class="content-wrapper fade-in">
+          <app-call-history></app-call-history>
+        </div>
+      </div>
+
+    </main>
+  </div>
+</div>

@@ -1,0 +1,166 @@
+<div class="page-container fade-in">
+  
+  <div class="section-header">
+    <div class="header-text">
+      <h1>Gestión de Clientes</h1>
+      <p>Administra la base de datos de clientes y sus servicios.</p>
+    </div>
+    <button class="btn btn-primary" (click)="startCreate()">
+      <span class="material-icons-round">person_add</span>
+      Nuevo Cliente
+    </button>
+  </div>
+
+  <div class="table-toolbar">
+    <div class="search-box">
+      <span class="material-icons-round icon">search</span>
+      <input 
+        type="text" 
+        class="form-input" 
+        placeholder="Buscar por DNI..." 
+        [(ngModel)]="searchDni" 
+        (keyup.enter)="searchClient()">
+      
+      <button *ngIf="searchDni" class="clear-btn" (click)="clearSearch()">
+        <span class="material-icons-round">close</span>
+      </button>
+    </div>
+  </div>
+
+  <div *ngIf="selectedClient && !isCreating && !isEditing" class="client-detail-card fade-in">
+    <div class="detail-header">
+      <div class="client-identity">
+        <div class="avatar-large">
+          {{ selectedClient.nombreCompleto.charAt(0) | uppercase }}
+        </div>
+        <div>
+          <h2>{{ selectedClient.nombreCompleto }}</h2>
+          <p>Cliente #{{ selectedClient.numeroCliente }}</p>
+        </div>
+      </div>
+      <span class="status-badge" [ngClass]="getStatusClass(selectedClient.estadoServicio)">
+        {{ selectedClient.estadoServicio }}
+      </span>
+    </div>
+
+    <div class="detail-grid">
+      <div class="detail-item">
+        <label>DNI</label>
+        <span>{{ selectedClient.dni }}</span>
+      </div>
+      <div class="detail-item">
+        <label>Teléfono</label>
+        <span>{{ selectedClient.telefono }}</span>
+      </div>
+      <div class="detail-item">
+        <label>Correo</label>
+        <span>{{ selectedClient.correo }}</span>
+      </div>
+      <div class="detail-item">
+        <label>Plan Actual</label>
+        <span>{{ selectedClient.tipoPlan }}</span>
+      </div>
+      <div class="detail-item">
+        <label>Costo Mensual</label>
+        <span>S/. {{ selectedClient.costoPlan }}</span>
+      </div>
+    </div>
+
+    <div class="detail-actions">
+      <button class="btn btn-secondary" (click)="startEdit()">
+        <span class="material-icons-round">edit</span> Editar
+      </button>
+      <button class="btn btn-primary" (click)="startCreateAttention()">
+        <span class="material-icons-round">add_comment</span> Nueva Atención
+      </button>
+      <button class="btn btn-danger" (click)="deleteClient()">
+        <span class="material-icons-round">delete</span> Eliminar
+      </button>
+    </div>
+  </div>
+
+  <div *ngIf="!selectedClient && !isCreating && !isEditing" class="empty-state-container">
+    <div *ngIf="isLoading" class="loading-state">
+      <div class="spinner"></div>
+      <p>Buscando...</p>
+    </div>
+    
+    <div *ngIf="!isLoading && searchDni" class="not-found-state">
+      <span class="material-icons-round">search_off</span>
+      <p>No se encontró el DNI: {{ searchDni }}</p>
+    </div>
+
+    <div *ngIf="!isLoading && !searchDni" class="initial-state">
+      <span class="material-icons-round">manage_search</span>
+      <p>Ingresa un DNI para buscar un cliente</p>
+    </div>
+  </div>
+
+  <div *ngIf="isCreating || isEditing" class="form-card fade-in">
+    <div class="form-header">
+      <h3>{{ isCreating ? 'Registrar Nuevo Cliente' : 'Editar Cliente' }}</h3>
+      <button class="btn-icon" (click)="cancelForm()">
+        <span class="material-icons-round">close</span>
+      </button>
+    </div>
+
+    <form (ngSubmit)="saveClient()" class="modern-form">
+      <div class="form-grid">
+        <div class="form-group">
+          <label>DNI</label>
+          <input type="text" class="form-input" [(ngModel)]="clientForm.dni" name="dni" required maxlength="8">
+        </div>
+        <div class="form-group">
+          <label>Nombre Completo</label>
+          <input type="text" class="form-input" [(ngModel)]="clientForm.nombreCompleto" name="nombre" required>
+        </div>
+        <div class="form-group">
+          <label>Teléfono</label>
+          <input type="text" class="form-input" [(ngModel)]="clientForm.telefono" name="telefono">
+        </div>
+        <div class="form-group">
+          <label>Correo</label>
+          <input type="email" class="form-input" [(ngModel)]="clientForm.correo" name="correo">
+        </div>
+        <div class="form-group">
+          <label>Plan</label>
+          <input type="text" class="form-input" [(ngModel)]="clientForm.tipoPlan" name="plan">
+        </div>
+        <div class="form-group">
+          <label>Costo</label>
+          <input type="number" class="form-input" [(ngModel)]="clientForm.costoPlan" name="costo">
+        </div>
+        <div class="form-group">
+          <label>Estado</label>
+          <select class="form-input" [(ngModel)]="clientForm.estadoServicio" name="estado">
+            <option value="Activo">Activo</option>
+            <option value="Suspendido">Suspendido</option>
+            <option value="Inactivo">Inactivo</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-footer">
+        <button type="button" class="btn btn-secondary" (click)="cancelForm()">Cancelar</button>
+        <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+      </div>
+    </form>
+  </div>
+
+  <div *ngIf="isCreatingAttention" class="form-card fade-in">
+    <div class="form-header">
+      <h3>Nueva Atención</h3>
+      <button class="btn-icon" (click)="cancelAttentionForm()">
+        <span class="material-icons-round">close</span>
+      </button>
+    </div>
+    <div class="p-4">
+      <app-attention-form 
+        [selectedClient]="selectedClient" 
+        (attentionCreated)="onAttentionCreated($event)"
+        (cancel)="cancelAttentionForm()">
+      </app-attention-form>
+    </div>
+  </div>
+
+</div>

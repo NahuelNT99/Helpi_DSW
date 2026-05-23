@@ -1,0 +1,106 @@
+<div class="page-container fade-in">
+  
+  <div class="section-header">
+    <div class="header-text">
+      <h1>Historial de Atenciones</h1>
+      <p>Registro completo de interacciones con clientes.</p>
+    </div>
+  </div>
+
+  <div class="table-toolbar">
+    <div class="search-box">
+      <span class="material-icons-round icon">search</span>
+      <input 
+        type="text" 
+        class="form-input" 
+        placeholder="Buscar por ID, DNI, Asesor..." 
+        [(ngModel)]="searchQuery" 
+        (input)="searchTickets()">
+    </div>
+  </div>
+
+  <div class="table-card">
+    <table class="clean-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Fecha</th>
+          <th>Cliente</th>
+          <th>Descripción</th>
+          <th>Estado</th>
+          <th>Asesor</th>
+          <th class="text-right" *ngIf="canEditOrDelete()">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let atencion of filteredTickets">
+          
+          <td><span class="id-badge">#{{ atencion.idAtencion }}</span></td>
+          
+          <td>
+            <div class="date-info">
+              <span class="date">{{ atencion.fechaHora | date:'dd MMM yyyy' }}</span>
+              <small class="time">{{ atencion.fechaHora | date:'shortTime' }}</small>
+            </div>
+          </td>
+
+          <td>
+            <span class="client-name">{{ atencion.cliente?.nombreCompleto || 'N/A' }}</span>
+          </td>
+
+          <td class="desc-cell" title="{{ atencion.descripcion }}">
+            <div class="category-tag">{{ atencion.categoria?.nombreCategoria }}</div>
+            <p>{{ (atencion.descripcion || '') | slice:0:60 }}...</p>
+          </td>
+
+          <td>
+            <span class="badge status" [ngClass]="getStatusClass(atencion.estado)">
+              {{ atencion.estado }}
+            </span>
+          </td>
+
+          <td>
+            <div class="user-info">
+              <span class="avatar-mini">{{ atencion.usuario?.nombreCompleto?.charAt(0) || '?' }}</span>
+              <span>{{ atencion.usuario?.nombreCompleto || 'Sistema' }}</span>
+            </div>
+          </td>
+
+          <td class="text-right" *ngIf="canEditOrDelete()">
+            <div class="actions-cell">
+              <button class="btn-icon" (click)="editAtencion(atencion)" title="Editar">
+                <span class="material-icons-round">edit</span>
+              </button>
+              <button class="btn-icon danger" (click)="deleteAtencion(atencion)" title="Eliminar">
+                <span class="material-icons-round">delete</span>
+              </button>
+            </div>
+          </td>
+        </tr>
+
+        <tr *ngIf="isLoading">
+          <td colspan="7" class="loading-state">
+            <div class="spinner small"></div>
+            <span>Cargando historial...</span>
+          </td>
+        </tr>
+
+        <tr *ngIf="!isLoading && filteredTickets.length === 0">
+          <td colspan="7" class="empty-state">
+            <span class="material-icons-round">history_toggle_off</span>
+            <p>No se encontraron registros</p>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>
+
+<app-edit-atencion-modal
+  *ngIf="showEditModal"
+  [atencion]="selectedAtencion"
+  [isVisible]="showEditModal"
+  (close)="onEditModalClose()"
+  (save)="onEditModalSave($event)">
+</app-edit-atencion-modal>

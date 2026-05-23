@@ -1,0 +1,85 @@
+<div *ngIf="isVisible" class="modal-backdrop fade-in" (click)="onBackdropClick($event)">
+  <div class="modal-container scale-in">
+    
+    <div class="modal-header">
+      <div class="header-icon">
+        <span class="material-icons-round">edit_note</span>
+      </div>
+      <div class="header-text">
+        <h3>Editar Atención</h3>
+        <p class="subtitle">ID #{{ atencion?.idAtencion }}</p>
+      </div>
+      <button class="close-btn" (click)="onClose()">
+        <span class="material-icons-round">close</span>
+      </button>
+    </div>
+
+    <div class="modal-body">
+      <form (ngSubmit)="onSave()" #editAtencionForm="ngForm" class="modern-form">
+        
+        <div class="form-group">
+          <label for="descripcion">Descripción</label>
+          <div class="input-wrapper">
+            <textarea
+              id="descripcion"
+              name="descripcion"
+              class="form-input textarea"
+              [(ngModel)]="editForm.descripcion"
+              required
+              rows="4"
+              placeholder="Detalla lo sucedido en la atención...">
+            </textarea>
+          </div>
+        </div>
+
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="estado">Estado</label>
+            <div class="input-wrapper">
+              <span class="material-icons-round input-icon">flag</span>
+              <select
+                id="estado"
+                name="estado"
+                class="form-input"
+                [(ngModel)]="editForm.estado"
+                required>
+                <option value="" disabled>Selecciona...</option>
+                <option *ngFor="let estado of estados" [value]="estado">{{ estado }}</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="categoria">Categoría</label>
+            <div class="input-wrapper">
+              <span class="material-icons-round input-icon">category</span>
+              <select
+                id="categoria"
+                name="categoria"
+                class="form-input"
+                [(ngModel)]="editForm.idCategoria"
+                required>
+                <option [ngValue]="0" disabled>Selecciona...</option>
+                <option *ngFor="let categoria of categorias" [ngValue]="categoria.idCategoria">
+                  {{ categoria.nombreCategoria }}
+                </option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="onClose()" [disabled]="isLoading">
+            Cancelar
+          </button>
+          <button type="submit" class="btn btn-primary" [disabled]="!editAtencionForm.form.valid || isLoading">
+            <span *ngIf="isLoading" class="spinner small"></span>
+            {{ isLoading ? 'Guardando...' : 'Guardar Cambios' }}
+          </button>
+        </div>
+
+      </form>
+    </div>
+
+  </div>
+</div>

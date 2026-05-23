@@ -1,0 +1,207 @@
+<div class="page-container fade-in">
+  
+  <div class="section-header">
+    <div class="header-text">
+      <h1>Gestión de Tickets</h1>
+      <p>Administra las incidencias y soporte técnico.</p>
+    </div>
+    <button *ngIf="!isTecnico" class="btn btn-primary" (click)="startCreating()">
+      <span class="material-icons-round">add</span>
+      Nuevo Ticket
+    </button>
+  </div>
+
+  <div class="table-toolbar">
+    <div class="search-box">
+      <span class="material-icons-round icon">search</span>
+      <input 
+        type="text" 
+        class="form-input" 
+        placeholder="Buscar ticket..." 
+        [(ngModel)]="searchTerm" 
+        (keyup.enter)="searchTickets()">
+    </div>
+    
+    <div class="filters">
+      <span class="filter-tag active">Todos</span>
+      <span class="filter-tag">Pendientes</span>
+      <span class="filter-tag">En Proceso</span>
+    </div>
+  </div>
+
+  <div class="table-card">
+    <table class="clean-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Problema</th>
+          <th>Cliente</th>
+          <th>Técnico</th>
+          <th>Prioridad</th>
+          <th>Estado</th>
+          <th class="text-right">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let ticket of tickets" (click)="selectTicket(ticket)" class="clickable-row">
+          
+          <td><span class="id-badge">#{{ ticket.idTicket }}</span></td>
+          
+          <td class="problem-cell">
+            <span class="category">{{ ticket.atencion.categoria.nombreCategoria }}</span>
+            <span class="desc">{{ (ticket.descripcionProblema || '') | slice:0:50 }}...</span>
+          </td>
+
+          <td>
+            <div class="user-info">
+              <span class="name">{{ ticket.atencion?.cliente?.nombreCompleto || 'N/A' }}</span>
+            </div>
+          </td>
+
+          <td>
+            <div class="user-info" *ngIf="ticket.tecnico">
+              <span class="name">{{ ticket.tecnico.nombreCompleto }}</span>
+            </div>
+            <span class="unassigned" *ngIf="!ticket.tecnico">Sin asignar</span>
+          </td>
+
+          <td>
+            <span class="badge priority" [ngClass]="getPriorityClass(ticket.prioridad)">
+              {{ ticket.prioridad }}
+            </span>
+          </td>
+
+          <td>
+            <span class="badge status" [ngClass]="getStatusClass(ticket.estadoTicket)">
+              {{ ticket.estadoTicket }}
+            </span>
+          </td>
+
+          <td class="text-right" (click)="$event.stopPropagation()">
+            <div class="actions-cell">
+              <button *ngIf="!isAsesor" class="btn-icon" (click)="selectTicket(ticket); editTicket()" title="Editar">
+                <span class="material-icons-round">edit</span>
+              </button>
+              <button *ngIf="!isTecnico && !isAsesor" class="btn-icon danger" (click)="selectedTicket=ticket; deleteTicket()" title="Eliminar">
+                <span class="material-icons-round">delete</span>
+              </button>
+            </div>
+          </td>
+        </tr>
+
+        <tr *ngIf="tickets.length === 0">
+          <td colspan="7" class="empty-state">
+            <span class="material-icons-round">confirmation_number</span>
+            <p>No se encontraron tickets</p>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>
+
+<div class="modal-overlay fade-in" *ngIf="isCreating || isEditing">
+  <div class="modal-card">
+    
+    <div class="modal-header">
+      <h3>{{ isCreating ? 'Crear Nuevo Ticket' : 'Editar Ticket #' + selectedTicket?.idTicket }}</h3>
+      <button class="btn-icon" (click)="cancelEdit()">
+        <span class="material-icons-round">close</span>
+      </button>
+    </div>
+
+    <div class="modal-body">
+      <form *ngIf="isCreating" (ngSubmit)="createTicket()" class="modern-form">
+        <div class="form-group full-width">
+          <label>DNI del Cliente *</label>
+          <div class="input-with-action">
+            <input type="text" class="form-input" [(ngModel)]="clienteDni" name="clienteDni" placeholder="Ingrese 8 dígitos" maxlength="8" (input)="onDniInput($event)" required>
+            <span *ngIf="clienteEncontrado" class="success-check material-icons-round">check_circle</span>
+          </div>
+          <small *ngIf="clienteEncontrado" class="text-success">{{ clienteEncontrado.nombreCompleto }}</small>
+          <small *ngIf="clienteSearchError" class="text-error">{{ clienteSearchError }}</small>
+        </div>
+
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Categoría *</label>
+            <select class="form-input" [(ngModel)]="newTicket.atencion.categoria.idCategoria" name="cat" required>
+              <option [ngValue]="0" disabled>Seleccione...</option>
+              <option *ngFor="let cat of categorias" [ngValue]="cat.idCategoria">{{ cat.nombreCategoria }}</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label>Técnico *</label>
+            <select class="form-input" [(ngModel)]="newTicket.tecnico.idUsuario" name="tec" required>
+              <option [ngValue]="0" disabled>Seleccione...</option>
+              <option *ngFor="let tec of tecnicos" [ngValue]="tec.idUsuario">{{ tec.nombreCompleto }}</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Prioridad</label>
+            <select class="form-input" [(ngModel)]="newTicket.prioridad" name="prio">
+              <option *ngFor="let p of prioridadesTicket" [value]="p">{{ p }}</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Estado</label>
+            <select class="form-input" [(ngModel)]="newTicket.estadoTicket" name="est">
+              <option *ngFor="let e of estadosTicket" [value]="e">{{ e }}</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group full-width">
+          <label>Descripción del Problema *</label>
+          <textarea class="form-input" rows="3" [(ngModel)]="newTicket.descripcionProblema" name="desc" required></textarea>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="cancelEdit()">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Crear Ticket</button>
+        </div>
+      </form>
+
+      <form *ngIf="isEditing" (ngSubmit)="saveTicket()" class="modern-form">
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Categoría</label>
+            <select class="form-input" [(ngModel)]="selectedTicket!.atencion.categoria.idCategoria" name="editCat">
+              <option *ngFor="let cat of categorias" [ngValue]="cat.idCategoria">{{ cat.nombreCategoria }}</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Técnico</label>
+            <select class="form-input" [(ngModel)]="selectedTicket!.tecnico.idUsuario" name="editTec">
+              <option *ngFor="let tec of tecnicos" [ngValue]="tec.idUsuario">{{ tec.nombreCompleto }}</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Prioridad</label>
+            <select class="form-input" [(ngModel)]="selectedTicket!.prioridad" name="editPrio">
+              <option *ngFor="let p of prioridadesTicket" [value]="p">{{ p }}</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Estado</label>
+            <select class="form-input" [(ngModel)]="selectedTicket!.estadoTicket" name="editEst">
+              <option *ngFor="let e of estadosTicket" [value]="e">{{ e }}</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group full-width">
+          <label>Descripción</label>
+          <textarea class="form-input" rows="3" [(ngModel)]="selectedTicket!.descripcionProblema" name="editDesc"></textarea>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="cancelEdit()">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

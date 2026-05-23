@@ -1,0 +1,237 @@
+
+.user-management-advanced-container {
+  background: transparent; 
+  padding: 0 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  box-shadow: none;
+  border: none;
+}
+
+.user-management-title {
+  font-size: 1.75rem; 
+  font-weight: 700;
+  color: #111827; 
+  margin: 0;
+  letter-spacing: -0.025em;
+}
+
+.btn-standard {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: 500;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.9rem;
+}
+
+.btn-standard .material-icons {
+  font-size: 20px;
+}
+
+.btn-primary {
+  background-color: #2563eb;
+  color: white;
+  box-shadow: 0 1px 2px rgba(37, 99, 235, 0.3);
+}
+
+.btn-primary:hover {
+  background-color: #1d4ed8;
+  transform: translateY(-1px);
+}
+
+.btn-sm {
+  padding: 6px;
+  width: 32px;
+  height: 32px;
+  justify-content: center;
+  border-radius: 6px;
+}
+
+.btn-icon-only span { margin: 0; }
+
+.btn-standard.btn-primary.btn-sm {
+  background-color: #eff6ff;
+  color: #2563eb;
+  border: 1px solid transparent;
+  box-shadow: none;
+}
+
+.btn-standard.btn-primary.btn-sm:hover {
+  background-color: #2563eb;
+  color: white;
+}
+
+.btn-danger {
+  background-color: #fee2e2;
+  color: #dc2626;
+}
+
+.btn-danger:hover {
+  background-color: #dc2626;
+  color: white;
+}
+
+.user-management-search-box {
+  position: relative;
+  margin-bottom: 24px;
+  max-width: 400px; 
+}
+
+.user-management-search-box input {
+  width: 100%;
+  padding: 12px 12px 12px 44px; 
+  background-color: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  color: #1f2937;
+  outline: none;
+  transition: all 0.2s;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+}
+
+.user-management-search-box input:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px #eff6ff;
+}
+
+.user-management-search-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #9ca3af; 
+  font-size: 22px;
+  pointer-events: none;
+}
+
+.user-management-clear-btn {
+  right: 12px;
+  color: #9ca3af;
+}
+
+.user-management-clear-btn:hover {
+  color: #4b5563;
+}
+
+.user-management-user-card {
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px; 
+  padding: 20px;
+  margin-bottom: 16px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05); 
+  transition: all 0.2s ease;
+  cursor: default; 
+}
+
+.user-management-user-card:hover {
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  border-color: #d1d5db;
+  transform: translateY(-2px);
+}
+
+.ring-2 {
+  border-color: #2563eb !important;
+  box-shadow: 0 0 0 3px #eff6ff !important;
+}
+
+.user-management-user-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  border-bottom: 1px solid #f3f4f6;
+  padding-bottom: 12px;
+}
+
+.user-management-user-name {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #111827;
+  display: block;
+}
+
+.user-management-user-login {
+  font-size: 0.9rem;
+  color: #6b7280;
+}
+
+.user-management-user-details {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Responsivo */
+  gap: 16px;
+  font-size: 0.9rem;
+}
+
+.user-management-user-details div {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #4b5563;
+}
+
+.user-management-user-details .material-icons {
+  font-size: 18px;
+  color: #9ca3af;
+}
+
+.role-badge {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  display: inline-block;
+}
+
+.role-supervisor {
+  background-color: #eff6ff;
+  color: #2563eb;
+  border: 1px solid #dbeafe;
+}
+
+.role-tecnico, .role-técnico {
+  background-color: #fff7ed;
+  color: #ea580c;
+  border: 1px solid #ffedd5;
+}
+
+.role-asesor {
+  background-color: #f8fafc;
+  color: #475569;
+  border: 1px solid #e2e8f0;
+}
+
+.role-default {
+  background-color: #f3f4f6;
+  color: #374151;
+}
+
+.text-center.py-8 {
+  padding: 60px 0;
+  background: white;
+  border-radius: 12px;
+  border: 1px dashed #e5e7eb;
+}
+
+.text-center .material-icons {
+  font-size: 48px;
+  color: #d1d5db;
+  margin-bottom: 12px;
+}
+
+.text-center p {
+  color: #6b7280;
+  font-size: 1rem;
+}

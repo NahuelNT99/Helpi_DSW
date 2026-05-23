@@ -1,0 +1,32 @@
+<div class="modal-overlay" *ngIf="isVisible" (click)="onClose()">
+  <div class="modal-container scale-in" (click)="$event.stopPropagation()">
+    
+    <div class="modal-header">
+      <div class="header-icon warning">
+        <span class="material-icons-round">warning_amber</span>
+      </div>
+      <button class="close-btn" (click)="onClose()">
+        <span class="material-icons-round">close</span>
+      </button>
+    </div>
+    
+    <div class="modal-body">
+      <h3>Eliminar Usuario</h3>
+      <p>
+        ¿Estás seguro de que deseas eliminar a <strong class="highlight">{{ user?.nombreCompleto }}</strong>?
+        Esta acción es permanente y no se puede deshacer.
+      </p>
+    </div>
+    
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" (click)="onClose()">
+        Cancelar
+      </button>
+      <button type="button" class="btn btn-danger" (click)="onConfirmDelete()">
+        <span class="material-icons-round">delete_forever</span>
+        Eliminar
+      </button>
+    </div>
+
+  </div>
+</div>

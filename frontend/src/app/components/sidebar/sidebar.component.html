@@ -1,0 +1,107 @@
+<aside class="modern-sidebar">
+  
+  <div class="sidebar-header">
+    <div class="brand-container">
+      <div class="brand-icon-wrapper">
+        <span class="brand-letter">H</span>
+      </div>
+      <div class="brand-content">
+        <h1 class="brand-title">Helpi</h1>
+        <p class="brand-subtitle">Workspace</p>
+      </div>
+    </div>
+  </div>
+  
+  <div class="sidebar-content">
+    <nav class="sidebar-nav">
+      
+      <div class="nav-section" *ngIf="isSupervisor">
+        <div class="section-header">
+          <span class="section-title">Inicio</span>
+        </div>
+        <ul class="nav-list">
+          <li>
+            <button class="nav-item" (click)="navigateTo('overview')" [class.active]="activeTab === 'overview'">
+              <span class="material-icons-round nav-icon">dashboard</span>
+              <span class="nav-text">Resumen</span>
+            </button>
+          </li>
+          <li>
+            <button class="nav-item" (click)="navigateTo('clients')" [class.active]="activeTab === 'clients'">
+              <span class="material-icons-round nav-icon">people</span>
+              <span class="nav-text">Clientes</span>
+            </button>
+          </li>
+          <li>
+            <button class="nav-item" (click)="navigateTo('tickets')" [class.active]="activeTab === 'tickets'">
+              <span class="material-icons-round nav-icon">confirmation_number</span>
+              <span class="nav-text">Tickets</span>
+            </button>
+          </li>
+        </ul>
+        
+        <div class="section-header mt-4">
+          <span class="section-title">Administrativo</span>
+        </div>
+        <ul class="nav-list">
+          <li>
+            <button class="nav-item" (click)="navigateTo('users')" [class.active]="activeTab === 'users'">
+              <span class="material-icons-round nav-icon">manage_accounts</span>
+              <span class="nav-text">Usuarios</span>
+            </button>
+          </li>
+          <li>
+            <button class="nav-item" (click)="navigateTo('history')" [class.active]="activeTab === 'history'">
+              <span class="material-icons-round nav-icon">support_agent</span>
+              <span class="nav-text">Atenciones</span>
+            </button>
+          </li>
+        </ul>
+      </div>
+
+      <div class="nav-section" *ngIf="isTecnico">
+        <div class="section-header">
+          <span class="section-title">Mi Trabajo</span>
+        </div>
+        <ul class="nav-list">
+          <li>
+            <button class="nav-item" (click)="navigateTo('tickets')" [class.active]="activeTab === 'tickets'">
+              <span class="material-icons-round nav-icon">confirmation_number</span>
+              <span class="nav-text">Mis Tickets</span>
+            </button>
+          </li>
+        </ul>
+      </div>
+
+      <div class="nav-section" *ngIf="!isSupervisor && !isTecnico">
+        <div class="section-header">
+          <span class="section-title">Gestión</span>
+        </div>
+        <ul class="nav-list">
+          <li>
+            <button class="nav-item" (click)="navigateTo('clients')" [class.active]="activeTab === 'clients'">
+              <span class="material-icons-round nav-icon">people</span>
+              <span class="nav-text">Clientes</span>
+            </button>
+          </li>
+          <li>
+            <button class="nav-item" (click)="navigateTo('tickets')" [class.active]="activeTab === 'tickets'">
+              <span class="material-icons-round nav-icon">confirmation_number</span>
+              <span class="nav-text">Tickets</span>
+            </button>
+          </li>
+          <li>
+            <button class="nav-item" (click)="navigateTo('history')" [class.active]="activeTab === 'history'">
+              <span class="material-icons-round nav-icon">history</span>
+              <span class="nav-text">Historial</span>
+            </button>
+          </li>
+        </ul>
+      </div>
+    </nav>
+    
+    <div class="sidebar-footer">
+      <div class="version-badge">v2.1.0</div>
+    </div>
+  </div>
+</aside>

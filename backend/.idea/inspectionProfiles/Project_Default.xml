@@ -1,0 +1,32 @@
+<component name="InspectionProjectProfileManager">
+  <profile version="1.0">
+    <option name="myName" value="Project Default" />
+    <inspection_tool class="VulnerableLibrariesLocal" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="isIgnoringEnabled" value="true" />
+      <option name="ignoredModules">
+        <list>
+          <option value="Helpi" />
+          <option value="Helpi" />
+          <option value="Helpi" />
+          <option value="Helpi" />
+        </list>
+      </option>
+      <option name="ignoredPackages">
+        <list>
+          <option value="ch.qos.logback:logback-core:1.5.18" />
+          <option value="org.apache.tomcat.embed:tomcat-embed-core:10.1.43" />
+          <option value="org.springframework:spring-beans:6.2.9" />
+          <option value="org.springframework:spring-core:6.2.9" />
+        </list>
+      </option>
+      <option name="ignoredReasons">
+        <list>
+          <option value="In progress" />
+          <option value="Not exploitable" />
+          <option value="Not exploitable" />
+          <option value="Not exploitable" />
+        </list>
+      </option>
+    </inspection_tool>
+  </profile>
+</component>

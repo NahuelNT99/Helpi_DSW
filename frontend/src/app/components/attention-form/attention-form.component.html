@@ -1,0 +1,105 @@
+<div class="attention-wrapper fade-in">
+  
+  <div class="form-header">
+    <div class="header-icon">
+      <span class="material-icons-round">add_comment</span>
+    </div>
+    <div class="header-text">
+      <h3>Nueva Atención</h3>
+      <p>Registra la interacción con el cliente.</p>
+    </div>
+  </div>
+
+  <div *ngIf="selectedClient" class="client-summary">
+    <div class="client-avatar">
+      {{ selectedClient.nombreCompleto.charAt(0) | uppercase }}
+    </div>
+    <div class="client-details">
+      <span class="client-name">{{ selectedClient.nombreCompleto }}</span>
+      <span class="client-dni">DNI: {{ selectedClient.dni }}</span>
+    </div>
+    <span class="client-status active">Cliente Activo</span>
+  </div>
+
+  <form (ngSubmit)="onSubmit()" *ngIf="selectedClient" class="modern-form">
+    
+    <div class="form-grid">
+      <div class="form-group">
+        <label for="categoria">Categoría *</label>
+        <div class="input-wrapper">
+          <span class="material-icons-round input-icon">category</span>
+          <select 
+            class="form-input" 
+            id="categoria"
+            [(ngModel)]="atencionForm.idCategoria" 
+            name="categoria"
+            required
+            (change)="clearMessages()">
+            <option [ngValue]="0" disabled>Selecciona...</option>
+            <option *ngFor="let categoria of categorias" [ngValue]="categoria.idCategoria">
+              {{ categoria.nombreCategoria }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="estado">Estado *</label>
+        <div class="input-wrapper">
+          <span class="material-icons-round input-icon">flag</span>
+          <select 
+            class="form-input" 
+            id="estado"
+            [(ngModel)]="atencionForm.estado" 
+            name="estado"
+            required
+            (change)="clearMessages()">
+            <option *ngFor="let estado of estados" [value]="estado.value">
+              {{ estado.label }}
+            </option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="descripcion">Descripción de la Atención *</label>
+      <textarea 
+        class="form-input" 
+        id="descripcion"
+        [(ngModel)]="atencionForm.descripcion" 
+        name="descripcion"
+        rows="4"
+        placeholder="Escribe los detalles de la consulta o reclamo..."
+        required
+        (input)="clearMessages()"></textarea>
+    </div>
+
+    <div *ngIf="errorMessage" class="alert error slide-up">
+      <span class="material-icons-round">error_outline</span>
+      <span>{{ errorMessage }}</span>
+    </div>
+
+    <div *ngIf="successMessage" class="alert success slide-up">
+      <span class="material-icons-round">check_circle</span>
+      <span>{{ successMessage }}</span>
+    </div>
+
+    <div class="form-footer">
+      <button type="button" class="btn btn-secondary" (click)="onCancel()">
+        Cancelar
+      </button>
+      <button type="submit" class="btn btn-primary" [disabled]="isLoading">
+        <span *ngIf="isLoading" class="spinner small"></span>
+        {{ isLoading ? 'Guardando...' : 'Registrar Atención' }}
+      </button>
+    </div>
+
+  </form>
+
+  <div *ngIf="!selectedClient" class="empty-state">
+    <span class="material-icons-round">person_search</span>
+    <p>Selecciona un cliente primero</p>
+  </div>
+
+</div>

@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { AuthService } from './auth.service';
+import { environment } from '../../environments/environment';
 
 
 export interface CategoriaAtencion {
@@ -111,7 +112,7 @@ export class ApiService {
   getClientes(): Observable<Client[]> {
     return this.http.get<Client[]>(`${this.baseUrl}/clientes`, { headers: this.getAuthHeaders() });
   }
-  private baseUrl = 'http://localhost:8080/api';
+  private baseUrl = environment.apiUrl;
 
   constructor(
     private http: HttpClient,

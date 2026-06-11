@@ -5,10 +5,21 @@
       <h1>Gestión de Tickets</h1>
       <p>Administra las incidencias y soporte técnico.</p>
     </div>
-    <button *ngIf="!isTecnico" class="btn btn-primary" (click)="startCreating()">
-      <span class="material-icons-round">add</span>
-      Nuevo Ticket
-    </button>
+    
+    <div style="display: flex; gap: 10px;">
+      <button class="btn" style="background-color: #198754; color: white; padding: 10px 15px; border: none; border-radius: 5px; cursor: pointer; display: flex; align-items: center; gap: 5px;" (click)="descargarExcel()">
+        <span class="material-icons-round" style="font-size: 18px;">table_view</span> Excel
+      </button>
+      
+      <button class="btn" style="background-color: #dc3545; color: white; padding: 10px 15px; border: none; border-radius: 5px; cursor: pointer; display: flex; align-items: center; gap: 5px;" (click)="descargarPdf()">
+        <span class="material-icons-round" style="font-size: 18px;">picture_as_pdf</span> PDF
+      </button>
+
+      <button *ngIf="!isTecnico" class="btn btn-primary" (click)="startCreating()">
+        <span class="material-icons-round">add</span>
+        Nuevo Ticket
+      </button>
+    </div>
   </div>
 
   <div class="table-toolbar">
@@ -48,7 +59,7 @@
           <td><span class="id-badge">#{{ ticket.idTicket }}</span></td>
           
           <td class="problem-cell">
-            <span class="category">{{ ticket.atencion.categoria.nombreCategoria }}</span>
+            <span class="category">{{ ticket.atencion.categoria?.nombreCategoria || 'Sin Categoría' }}</span>
             <span class="desc">{{ (ticket.descripcionProblema || '') | slice:0:50 }}...</span>
           </td>
 
@@ -73,7 +84,7 @@
 
           <td>
             <span class="badge status" [ngClass]="getStatusClass(ticket.estadoTicket)">
-              {{ ticket.estadoTicket }}
+               {{ ticket.estadoTicket }}
             </span>
           </td>
 

@@ -3,6 +3,7 @@ import { isPlatformBrowser } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { tap } from 'rxjs/operators';
+import { environment } from '../../environments/environment';
 
 interface AuthResponse {
   token: string;
@@ -25,7 +26,7 @@ interface UserInfo {
   providedIn: 'root'
 })
 export class AuthService {
-  private baseUrl = 'http://localhost:8080/api/auth'; 
+  private baseUrl = `${environment.apiUrl}/auth`; 
   private tokenKey = 'jwt_token';
   private userInfoKey = 'user_info';
 

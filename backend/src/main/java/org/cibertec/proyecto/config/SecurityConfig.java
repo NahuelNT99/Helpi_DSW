@@ -73,6 +73,7 @@ public class SecurityConfig {
                 .requestMatchers("/api/tickets/**").hasAnyAuthority("ROLE_SUPERVISOR", "ROLE_ASESOR", "ROLE_TECNICO")
                 .requestMatchers("/api/clientes/**", "/api/categorias-atencion/**").hasAnyAuthority("ROLE_SUPERVISOR", "ROLE_ASESOR", "ROLE_TECNICO")
                 .requestMatchers("/api/atenciones/**", "/api/historial-llamadas/**").hasAnyAuthority("ROLE_SUPERVISOR", "ROLE_ASESOR")
+                .requestMatchers("/api/reportes/**").permitAll()
                 .anyRequest().authenticated()
         )
         .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));

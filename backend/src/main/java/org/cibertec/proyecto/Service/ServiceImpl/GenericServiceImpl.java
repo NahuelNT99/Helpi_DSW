@@ -2,7 +2,7 @@ package org.cibertec.proyecto.Service.ServiceImpl;
 
 import org.cibertec.proyecto.Service.GenericService;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.transaction.annotation.Transactional; // <-- IMPORTANTE IMPORTAR ESTO
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -11,7 +11,7 @@ public class GenericServiceImpl <T,ID> implements GenericService<T,ID> {
     protected JpaRepository<T,ID> repository;
 
     @Override
-    @Transactional(readOnly = true) // <-- Solo lectura, optimiza el rendimiento
+    @Transactional(readOnly = true)
     public T getById(ID id) {
         return repository.findById(id).orElseThrow(() -> new RuntimeException("Resource not found with id: " + id));
     }
@@ -23,7 +23,7 @@ public class GenericServiceImpl <T,ID> implements GenericService<T,ID> {
     }
 
     @Override
-    @Transactional // <-- Garantiza ACID: Si hay error, hace rollback automático
+    @Transactional
     public void create(T entity) {
         repository.save(entity);
     }

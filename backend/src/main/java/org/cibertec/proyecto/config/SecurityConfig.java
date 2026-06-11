@@ -51,10 +51,11 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        // Agregamos tu localhost para pruebas y el dominio de Railway por si acaso
+        // Agregamos tu localhost para pruebas y el dominio de Railway
         configuration.setAllowedOrigins(Arrays.asList("http://localhost:4200", "https://helpidsw-production.up.railway.app"));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-        configuration.setAllowedHeaders(Arrays.asList("*"));
+        // Cambiamos el "*" por los headers específicos que usa Angular para evitar bloqueos del navegador
+        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "Accept", "X-Requested-With"));
         configuration.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
@@ -64,20 +65,21 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-    http
-        .cors(cors -> cors.configurationSource(corsConfigurationSource()))
-        .csrf(csrf -> csrf.disable())
-        .authorizeHttpRequests(authorizeRequests ->
-            authorizeRequests
-                .requestMatchers("/api/auth/**").permitAll() // ¡Este debe estar libre!
-                .requestMatchers("/api/usuarios/**").hasAnyAuthority("ROLE_SUPERVISOR", "ROLE_ASESOR", "ROLE_TECNICO")
-                .requestMatchers("/api/tickets/**").hasAnyAuthority("ROLE_SUPERVISOR", "ROLE_ASESOR", "ROLE_TECNICO")
-                .requestMatchers("/api/clientes/**", "/api/categorias-atencion/**").hasAnyAuthority("ROLE_SUPERVISOR", "ROLE_ASESOR", "ROLE_TECNICO")
-                .requestMatchers("/api/atenciones/**", "/api/historial-llamadas/**").hasAnyAuthority("ROLE_SUPERVISOR", "ROLE_ASESOR")
-                .requestMatchers("/api/reportes/**").permitAll()
-                .anyRequest().authenticated()
-        )
-        .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+        http
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                .csrf(csrf -> csrf.disable())
+                .authorizeHttpRequests(authorizeRequests ->
+                        authorizeRequests
+                                // ¡AQUÍ ESTÁ LA MAGIA! Agregamos "/error" para que Spring nos diga qué está fallando realmente
+                                .requestMatchers("/api/auth/**", "/error").permitAll()
+                                .requestMatchers("/api/usuarios/**").hasAnyAuthority("ROLE_SUPERVISOR", "ROLE_ASESOR", "ROLE_TECNICO")
+                                .requestMatchers("/api/tickets/**").hasAnyAuthority("ROLE_SUPERVISOR", "ROLE_ASESOR", "ROLE_TECNICO")
+                                .requestMatchers("/api/clientes/**", "/api/categorias-atencion/**").hasAnyAuthority("ROLE_SUPERVISOR", "ROLE_ASESOR", "ROLE_TECNICO")
+                                .requestMatchers("/api/atenciones/**", "/api/historial-llamadas/**").hasAnyAuthority("ROLE_SUPERVISOR", "ROLE_ASESOR")
+                                .requestMatchers("/api/reportes/**").permitAll()
+                                .anyRequest().authenticated()
+                )
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
         http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
 

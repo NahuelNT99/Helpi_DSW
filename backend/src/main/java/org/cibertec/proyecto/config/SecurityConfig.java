@@ -51,11 +51,12 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOriginPatterns(Arrays.asList("*"));
+        // Agregamos tu localhost para pruebas y el dominio de Railway por si acaso
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:4200", "https://helpidsw-production.up.railway.app"));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("*"));
         configuration.setAllowCredentials(true);
-        
+
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
@@ -68,7 +69,7 @@ public class SecurityConfig {
         .csrf(csrf -> csrf.disable())
         .authorizeHttpRequests(authorizeRequests ->
             authorizeRequests
-                .requestMatchers("/api/auth/**").permitAll()
+                .requestMatchers("/api/auth/**").permitAll() // ¡Este debe estar libre!
                 .requestMatchers("/api/usuarios/**").hasAnyAuthority("ROLE_SUPERVISOR", "ROLE_ASESOR", "ROLE_TECNICO")
                 .requestMatchers("/api/tickets/**").hasAnyAuthority("ROLE_SUPERVISOR", "ROLE_ASESOR", "ROLE_TECNICO")
                 .requestMatchers("/api/clientes/**", "/api/categorias-atencion/**").hasAnyAuthority("ROLE_SUPERVISOR", "ROLE_ASESOR", "ROLE_TECNICO")
